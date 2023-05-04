@@ -104,7 +104,7 @@ contract  Marketplace is ReentrancyGuard {
         owner[_image_url] = msg.sender;
         sold_or_not[_image_url] = false;
         
-        new_most_sold--;
+        new_most_sold = _most_sold_num - 1;
         left_sells[_image_url] = new_most_sold;
         itemCount++;
         _nft.transferFrom(msg.sender, address(this), _tokenId);
