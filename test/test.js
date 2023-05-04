@@ -12,7 +12,9 @@ describe("GenshinMarket", function() {
     let URI3 = "asdasf"
 
     beforeEach(async function() {
+    // accounts = [Feeacount, SELLER1, SELLER2, ....]
     accounts = await web3.eth.getAccounts();
+    console.log(accounts)
     Market_deploy = await market.deployed();
     NFT_deploy = await nft.deployed();
     });
@@ -29,6 +31,20 @@ describe("GenshinMarket", function() {
     })
     })
 
+    describe("Minting NFTs", function(){
+        it("should track each mint nft", async function(){
+            await NFT_deploy.mint(URI, {from: accounts[1]})
+            assert.equal(await NFT_deploy.tokenCount(), 1);
+            assert.equal(await NFT_deploy.balanceOf(accounts[1]), 1);
+            assert.equal(await NFT_deploy.tokenURI(1), URI);
+
+            await NFT_deploy.mint(URI, {from: accounts[2]})
+            assert.equal(await NFT_deploy.tokenCount(), 2);
+            assert.equal(await NFT_deploy.balanceOf(accounts[2]), 1);
+            assert.equal(await NFT_deploy.tokenURI(2), URI);
+        })
+    })
+
     describe("Making images", function(){
         beforeEach(async function(){
             tokenCount = await NFT_deploy.mint(URI, {from: accounts[1]})
@@ -39,12 +55,14 @@ describe("GenshinMarket", function() {
         it("should track newly created image, transfer NFT from seller to market and emit imagecreated event", async function(){
             await Market_deploy.createNFT(NFT_deploy.address,
                 1, 1, 2, "abc1", {from: accounts[1]})
+            
+            console.log(accounts[1])
+            console.log(accounts[0])
 
             assert.equal(await NFT_deploy.ownerOf(1), Market_deploy.address);
             assert.equal(await Market_deploy.itemCount(), 1);
 
             const image = await Market_deploy.items(1);
-
             assert.equal(image.image_id, 1); // uint256 image_id;
             assert.equal(image.nft, NFT_deploy.address); // IERC721 _nft
             assert.equal(image.token_id, 1); // uint256 _tokenId
@@ -55,4 +73,6 @@ describe("GenshinMarket", function() {
             assert.equal(image.image_url, "abc1");
         });
         });
+
+    
 });
