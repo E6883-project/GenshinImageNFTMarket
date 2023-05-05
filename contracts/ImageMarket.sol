@@ -152,7 +152,7 @@ contract  Marketplace is ReentrancyGuard {
     }
 
     function listNFTForSale(uint256 _image_id, uint256 _price) external nonReentrant {
-        require(_image_id > 0 && _image_id < itemCount, "Image not found.");
+        require(_image_id > 0 && _image_id <= itemCount, "Image not found.");
         require(buyerstorage[_image_id] == msg.sender, "The image is not owned by the sender");
         require(_price > 0, "Price must be greater than 0");
         //Get the information of NFT.
@@ -173,7 +173,7 @@ contract  Marketplace is ReentrancyGuard {
     }
 
     function purchaseNFT(uint256 _image_id) external payable nonReentrant {
-        require(_image_id > 0 && _image_id < itemCount, "Image not found.");
+        require(_image_id > 0 && _image_id <= itemCount, "Image not found.");
         uint256 _price = calPrice(_image_id);
         require(msg.value >= _price, "Insufficient balance for the buyer.");
         GenshinImage storage image = items[_image_id];
@@ -208,7 +208,7 @@ contract  Marketplace is ReentrancyGuard {
     }
 
     function removeNFTFromSale(uint256 _image_id) external nonReentrant {
-        require(_image_id > 0 && _image_id < itemCount, "Image not found.");
+        require(_image_id > 0 && _image_id <= itemCount, "Image not found.");
         require(items[_image_id].seller == msg.sender, "The user does not own this image.");
         require(items[_image_id].sold == false, "The image has already been sold.");
         GenshinImage storage image = items[_image_id];
@@ -230,14 +230,14 @@ contract  Marketplace is ReentrancyGuard {
     }
 
     function transferNFT(uint256 _image_id, address receiver) external nonReentrant {
-        require(_image_id > 0 && _image_id < itemCount, "Image not found.");
+        require(_image_id > 0 && _image_id <= itemCount, "Image not found.");
         require(items[_image_id].sold == false, "The image has already been sold.");
-        require(buyerstorage[_image_id] == msg.sender, "The image is not owned by the sender");
+        // require(buyerstorage[_image_id] == msg.sender, "The image is not owned by the sender");
         require(receiver != address(0), "Recipient address cannot be zero.");
         require(_isContract(receiver), "Recipient address is not a contract.");
-        
 
         GenshinImage storage image = items[_image_id];
+        require(image.nft.ownerOf(image.token_id) == msg.sender, "The image is not owned by the sender");
         image.nft.transferFrom(msg.sender, receiver, image.token_id);
     
     }
