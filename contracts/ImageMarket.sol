@@ -194,6 +194,7 @@ contract  Marketplace is ReentrancyGuard {
         buyertotalprice[_image_id][msg.sender] = _price;
         spentmoney[msg.sender] += _price;
         earnmoney[image.seller] += image.price;
+        // TODO: most sold需要改吗
         //Emit event.
         emit Bought(
             _image_id,
