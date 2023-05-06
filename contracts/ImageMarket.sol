@@ -117,7 +117,7 @@ contract  Marketplace is ReentrancyGuard {
     function purchaseNFT(uint256 _image_id) external payable nonReentrant {
         require(_image_id > 0 && _image_id <= itemCount, "Image not found.");
         uint256 _price = calPrice(_image_id);
-        require(msg.value >= _price, "Insufficient balance for the buyer.");
+        require(msg.value == _price, "Incorrect amount of Ether.");
         GenshinImage storage image = items[_image_id];
         require(image.listed, "The image is not listed for sale.");
         require(image.seller != msg.sender, "The image cannot be bought by its owner.");
