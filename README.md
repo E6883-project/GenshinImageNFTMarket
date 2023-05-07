@@ -21,7 +21,7 @@
 2. Compile the contract: `truffle compile`
 3. Migrate/Deploy the contract:
     - Local Deployment with Ganache: `truffle migrate`
-    - TODO (still testing): Test Network Deployment; `truffle migrate --network sepolia`
+    - Test Network Deployment: `truffle migrate --network sepolia`, cost at least 0.013 sepETH to deploy given the price on 05/07/2023
 4. Test the contract: `truffle test`
 
 
