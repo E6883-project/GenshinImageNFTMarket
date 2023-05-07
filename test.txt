@@ -1,5 +1,0 @@
-Using network 'test'.
-
-
-Compiling your contracts...
-===========================
