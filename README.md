@@ -17,6 +17,7 @@
     - Truffle v5.8.4 (core: 5.8.4)
     - Ganache v7.8.0
     - Node v18.16.0
+2. Install npm packages: `sudo npm i`
 2. Compile the contract: `truffle compile`
 3. Migrate/Deploy the contract:
     - Local Deployment with Ganache: `truffle migrate`
