@@ -87,8 +87,8 @@ module.exports = {
           "https://sepolia.infura.io/v3/4fbc8a9fa9234d4397f549d06bc92ae7"
         )
       },
-      gasPrice: 20000000000,
-      gas: 3716887,
+      // gasPrice: 20000000000,
+      // gas: 3716887,
       network_id: "*"
     }
     //
