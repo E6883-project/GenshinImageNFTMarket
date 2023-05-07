@@ -46,6 +46,10 @@
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 
+require('dotenv').config();
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+var mnemonic = "govern once twenty core stuff unlock issue ahead rather various pigeon palace";
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -57,6 +61,12 @@ module.exports = {
    * $ truffle test --network <network-name>
    */
 
+  // resolve: {
+  //   fallback: {
+  //     "crypto": require.resolve("crypto-browserify")
+  //   }
+  // },
+  
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
@@ -64,11 +74,23 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 7545,            // Standard Ethereum port (default: none)
+     network_id: "*"    // Any network (default: none)
+    },
+
+    sepolia: {
+      provider: function() {
+        return new HDWalletProvider(
+          mnemonic,
+          "https://sepolia.infura.io/v3/4fbc8a9fa9234d4397f549d06bc92ae7"
+        )
+      },
+      gasPrice: 20000000000,
+      gas: 3716887,
+      network_id: "*"
+    }
     //
     // An additional network, but with some advanced options…
     // advanced: {

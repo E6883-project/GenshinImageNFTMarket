@@ -1,7 +1,29 @@
 {
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
     "@openzeppelin/contracts": "^4.8.3",
+    "argon2-wasm-pro": "^1.1.0",
+    "assert": "^2.0.0",
+    "bootstrap": "^5.2.3",
     "chai": "^4.3.7",
-    "hardhat": "^2.14.0"
+    "lite-server": "^2.3.0",
+    "nodemon": "^1.17.3",
+    "dotenv":"^16.0.3",
+    "@truffle/hdwallet-provider":"^2.1.10"
+  },
+  "scripts": {
+    "start": "lite-server"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
