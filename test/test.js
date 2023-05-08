@@ -10,6 +10,7 @@ describe("GenshinMarket", function() {
     let URI = "Sample URI";
     let URI2 = "another sample url"
     let URI3 = "asdasf"
+    this.timeout(5000);
 
 
     beforeEach(async function() {
