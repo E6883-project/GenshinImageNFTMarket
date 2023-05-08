@@ -126,6 +126,7 @@ contract  Marketplace is ReentrancyGuard {
         feeAccount.transfer(_price - image.price);
         image.listed = false;
         image.nft.transferFrom(address(this), msg.sender, image.token_id);
+        image.seller = payable(msg.sender);
         items[_image_id] = image;
         
         //Emit event.
