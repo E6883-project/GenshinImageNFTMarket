@@ -4,9 +4,9 @@
 This is the Final Course Project for ELEN E6883 Intro to Blockchain. We implemented and tested a smart contract compliant with ERC721 standard, which is able to create, transfer, sale, remove, and purchase NFTs. The marketplace was deployed both on the local network with Truffle and Ganache, and also a test network with Sepolia and Metamask. 
 
 ## Team member
-- Mingxuan Lu, ml4799 (Test & deployment) 
-- Jingwei Zhang, jz3555 (Test) 
-- Zhengping Zhu, zz2989 (Smart Contract)
+- Mingxuan Lu, ml4799 (Test & deployment, Report) 
+- Jingwei Zhang, jz3555 (Test, Report) 
+- Zhengping Zhu, zz2989 (Smart Contract, Report)
 - Guangwen Wang, gw2459 (Report) 
 - Yi Wang, yw3903 (Report)
 
