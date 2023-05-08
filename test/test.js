@@ -149,7 +149,7 @@ describe("GenshinMarket", function() {
     });
 
 
-    it("Test: should execute an usuccessful NFT purchase", async function(){
+    it("Test: Usuccessful NFT purchase when passing incorrect amount to contract", async function(){
         await NFT_deploy.mint(URI, {from: accounts[1]})
         await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
         await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[2]});
@@ -178,6 +178,142 @@ describe("GenshinMarket", function() {
         assert.equal(image.listed, true);                          
         assert.equal(await NFT_deploy.ownerOf(1), Market_deploy.address);
     });
+
+    it("Test: Usuccessful NFT purchase when the NFT is not listed for sale", async function(){
+        await NFT_deploy.mint(URI, {from: accounts[1]})
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[2]});
+
+        await Market_deploy.createNFT(NFT_deploy.address,
+            1, "abc1", {from: accounts[1]})
+
+        assert.equal(await NFT_deploy.ownerOf(1), accounts[1]);
+        assert.equal(await NFT_deploy.tokenCount(), 1);
+        assert.equal(await Market_deploy.itemCount(), 1);
+        failed_transaction = false;
+
+        // Try to purchase an NFT not for sale
+        price1 = await Market_deploy.calPrice(1);
+        try {
+            await Market_deploy.purchaseNFT(1, {from: accounts[2], value: price1});
+          } catch (error) {
+            console.error('An error occurred:', error);
+            failed_transaction = true;
+          }
+
+        const image = await Market_deploy.items(1);
+        assert.equal(image.listed, false);                          
+        assert.equal(failed_transaction, true);
+    });
+
+    it("Test: Usuccessful NFT purchase when NFT is listed on sale first but got unlisted", async function(){
+        await NFT_deploy.mint(URI, {from: accounts[1]})
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[2]});
+
+        await Market_deploy.createNFT(NFT_deploy.address,
+            1, "abc1", {from: accounts[1]})
+
+        assert.equal(await NFT_deploy.ownerOf(1), accounts[1]);
+        assert.equal(await NFT_deploy.tokenCount(), 1);
+        assert.equal(await Market_deploy.itemCount(), 1);
+        await Market_deploy.listNFTForSale(1, 4, {from: accounts[1]})  
+        failed_transaction = false;
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, true);
+
+        // Try to purchase an NFT unlisted from sale
+        price1 = await Market_deploy.calPrice(1);
+        await Market_deploy.removeNFTFromSale(1, {from: accounts[1]})  
+        try {
+            await Market_deploy.purchaseNFT(1, {from: accounts[2], value: price1});
+          } catch (error) {
+            console.error('An error occurred:', error);
+            failed_transaction = true;
+          }
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, false);                          
+        assert.equal(failed_transaction, true);
+    });
+
+    it("Test: Try to remove a NFT from sale when it's not on sale", async function(){
+        await NFT_deploy.mint(URI, {from: accounts[1]})
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
+
+        await Market_deploy.createNFT(NFT_deploy.address,
+            1, "abc1", {from: accounts[1]})
+
+        assert.equal(await NFT_deploy.ownerOf(1), accounts[1]);
+        assert.equal(await NFT_deploy.tokenCount(), 1);
+        assert.equal(await Market_deploy.itemCount(), 1);
+
+        failed_transaction = false;
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, false);
+
+        try {
+            await Market_deploy.removeNFTFromSale(1, {from: accounts[1]})
+          } catch (error) {
+            console.error('An error occurred:', error);
+            failed_transaction = true;
+          }
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, false);                          
+        assert.equal(failed_transaction, true);
+    });
+
+    it("Test: Try to list a NFT for sale when it's already on sale", async function(){
+        await NFT_deploy.mint(URI, {from: accounts[1]})
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
+
+        await Market_deploy.createNFT(NFT_deploy.address,
+            1, "abc1", {from: accounts[1]})
+
+        assert.equal(await NFT_deploy.ownerOf(1), accounts[1]);
+        assert.equal(await NFT_deploy.tokenCount(), 1);
+        assert.equal(await Market_deploy.itemCount(), 1);
+
+        failed_transaction = false;
+        await Market_deploy.listNFTForSale(1, 4, {from: accounts[1]})
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, true);
+
+        try {
+            await Market_deploy.listNFTForSale(1, 4, {from: accounts[1]})
+          } catch (error) {
+            console.error('An error occurred:', error);
+            failed_transaction = true;
+          }
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, true);                          
+        assert.equal(failed_transaction, true);
+    });
+
+    it("Test: Non-owner try to list a NFT for sale", async function(){
+        await NFT_deploy.mint(URI, {from: accounts[1]})
+        await NFT_deploy.setApprovalForAll(Market_deploy.address, true, {from: accounts[1]});
+
+        await Market_deploy.createNFT(NFT_deploy.address,
+            1, "abc1", {from: accounts[1]})
+
+        assert.equal(await NFT_deploy.ownerOf(1), accounts[1]);
+        assert.equal(await NFT_deploy.tokenCount(), 1);
+        assert.equal(await Market_deploy.itemCount(), 1);
+
+        failed_transaction = false;
+
+        try {
+            await Market_deploy.listNFTForSale(1, 4, {from: accounts[2]})
+          } catch (error) {
+            console.error('An error occurred:', error);
+            failed_transaction = true;
+          }
+        image = await Market_deploy.items(1);
+        assert.equal(image.listed, false);                          
+        assert.equal(failed_transaction, true);
+    });
+
+    
 
 });
 
