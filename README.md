@@ -30,18 +30,13 @@ Download and install through `npm` the current version of Node.js, Truffle, Gana
 - Node v18.16.0
 - Web3.js v1.8.2
     
-## Deploy and test the contract on local network
-[TODO]
-
-## Deploy and test the contract on test network
-[TODO]
-
+## Deploy and test the contract (Local & Sepolia Test Network)
 1. Install npm packages: `sudo npm i`
 2. Compile the contract: `truffle compile`
 3. Migrate/Deploy the contract:
     - Local Deployment with Ganache: `truffle migrate`
     - Test Network Deployment: `truffle migrate --network sepolia`, cost at least 0.013 sepETH to deploy given the price on 05/07/2023
-4. Test the contract: `truffle test`
+4. Test the contract: `truffle test`; all the tests are conducted on locally.
 
 
 
