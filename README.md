@@ -12,7 +12,7 @@
 - `truffle-config.js`: truffle config files
 - `package.json`: npm package list
 
-## How run the code
+## How to run the code
 1. Download and install the current version of Node.js, Truffle, Ganache, MetaMask. This is my development version:
     - Truffle v5.8.4 (core: 5.8.4)
     - Ganache v7.8.0
